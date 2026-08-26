@@ -1,7 +1,5 @@
 # DeepSeek Harness SDD Code Agent
 
-![Tutorial cover: From Spec to Code](assets/linkedin-cover.png)
-
 A starter kit for turning [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) into a specification-driven engineering agent.
 
 The workflow assigns a different model to each responsibility:
