@@ -109,7 +109,6 @@ npm test
 ## Publishing assets
 
 - Full tutorial: [TUTORIAL_LINKEDIN.md](TUTORIAL_LINKEDIN.md)
-- Short LinkedIn post: [LINKEDIN_POST.md](LINKEDIN_POST.md)
 - Horizontal cover: [assets/linkedin-cover.png](assets/linkedin-cover.png)
 - Sample request: [examples/sample-request.md](examples/sample-request.md)
 
