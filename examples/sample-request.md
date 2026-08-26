@@ -1,23 +1,23 @@
-# Exemplo de solicitação
+# Sample request
 
-Implemente uma API HTTP pequena para gerenciar tarefas.
+Implement a small HTTP API for managing tasks.
 
-## Requisitos funcionais
+## Functional requirements
 
-- Criar uma tarefa com título obrigatório.
-- Listar tarefas.
-- Marcar uma tarefa como concluída.
-- Retornar `404` para ids inexistentes.
-- Persistir os dados em memória; banco de dados está fora do escopo.
+- Create a task with a required title.
+- List tasks.
+- Mark a task as completed.
+- Return `404` for unknown ids.
+- Store data in memory; a database is out of scope.
 
-## Requisitos de qualidade
+## Quality requirements
 
-- Escolha a stack a partir do que já existir no repositório.
-- Valide entradas na borda da API.
-- Use tipos estritos.
-- Inclua testes para caminho feliz, validação e recurso inexistente.
-- Documente como executar e testar.
+- Choose the stack based on what already exists in the repository.
+- Validate input at the API boundary.
+- Use strict types.
+- Include tests for the happy path, input validation, and missing resources.
+- Document how to run and test the project.
 
-## Critério de conclusão
+## Completion criteria
 
-O código, os testes e `docs/sdd/VERIFICATION.md` devem estar completos, com todos os checks relevantes passando.
+The code, tests, and `docs/sdd/VERIFICATION.md` must be complete, with all relevant checks passing.
