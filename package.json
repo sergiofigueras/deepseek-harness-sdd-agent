@@ -1,0 +1,16 @@
+{
+  "name": "deepseek-harness-sdd-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Model-routed SDD coding agent starter kit for DeepSeek Harness",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/validate.mjs",
+    "bootstrap": "bash scripts/bootstrap.sh",
+    "start": "bash scripts/launch.sh"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "license": "MIT"
+}

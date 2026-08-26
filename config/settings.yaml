@@ -1,0 +1,38 @@
+agent-default-model:
+  provider: openai-architecture
+  model: gpt-5.5
+  reasoningEffort: xhigh
+
+llm-pi-ai:
+  providers:
+    openai-architecture:
+      displayName: OpenAI Architecture and Verification
+      apiKeyEnv: OPENAI_API_KEY
+      api: openai-responses
+      baseURL: https://api.openai.com/v1
+      reasoning: xhigh
+      defaultInput: [text, image]
+      models:
+        - id: gpt-5.5
+          name: GPT-5.5 xhigh - Plans, Specs, and Verification
+          contextWindow: 1050000
+          maxTokens: 128000
+          input: [text, image]
+          reasoningEfforts:
+            xhigh: xhigh
+
+    openai-implementation:
+      displayName: OpenAI Coding Implementation
+      apiKeyEnv: OPENAI_API_KEY
+      api: openai-responses
+      baseURL: https://api.openai.com/v1
+      reasoning: high
+      defaultInput: [text, image]
+      models:
+        - id: gpt-5.3-codex
+          name: GPT-5.3-Codex high - Implementation and Tests
+          contextWindow: 400000
+          maxTokens: 128000
+          input: [text, image]
+          reasoningEfforts:
+            high: high
