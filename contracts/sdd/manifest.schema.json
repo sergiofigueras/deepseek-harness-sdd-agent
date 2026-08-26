@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.invalid/sdd/manifest.schema.json",
+  "title": "SDD run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "requestHash", "approvalMode", "git", "stages", "artifacts"],
+  "properties": {
+    "schemaVersion": {"const": "2.0"},
+    "runId": {"type": "string", "minLength": 8},
+    "requestHash": {"type": "string", "minLength": 8},
+    "approvalMode": {"enum": ["supervised", "autonomous"]},
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baselineHead", "dirtyFiles"],
+      "properties": {
+        "baselineHead": {"type": "string", "minLength": 7},
+        "dirtyFiles": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "provider", "model", "status", "commands"],
+        "properties": {
+          "name": {"enum": ["plan-and-spec", "implementation", "verification"]},
+          "provider": {"type": "string"},
+          "model": {"type": "string"},
+          "status": {"enum": ["pending", "running", "blocked", "completed"]},
+          "commands": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "artifacts": {"type": "array", "items": {"type": "string"}}
+  }
+}

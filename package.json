@@ -1,16 +1,25 @@
 {
   "name": "deepseek-harness-sdd-agent",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "Model-routed SDD coding agent starter kit for DeepSeek Harness",
   "type": "module",
   "scripts": {
-    "test": "node scripts/validate.mjs",
+    "test": "npm run validate && npm run test:contracts && npm run simulate:e2e && npm run validate:fixture",
+    "validate": "node scripts/validate.mjs",
+    "validate:sdd": "node scripts/validate-sdd.mjs",
+    "validate:fixture": "node scripts/validate-sdd.mjs --root tests/fixtures/reference-run",
+    "test:contracts": "node --test tests/*.test.mjs",
+    "simulate:e2e": "node scripts/simulate-e2e.mjs",
     "bootstrap": "bash scripts/bootstrap.sh",
     "start": "bash scripts/launch.sh"
   },
   "engines": {
     "node": ">=22.19.0"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "yaml": "2.9.0"
   },
   "license": "MIT"
 }

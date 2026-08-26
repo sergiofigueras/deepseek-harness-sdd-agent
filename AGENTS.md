@@ -11,14 +11,16 @@ You are a senior software engineer working inside this repository. Deliver worki
 ## Required SDD lifecycle
 
 1. Inspect the repository, relevant symbols, callers, tests, and existing conventions.
-2. Write `docs/sdd/PLAN.md` and `docs/sdd/SPEC.md` before implementation.
-3. Make the spec decision-complete: scope, non-goals, contracts, data flow, error cases, security, observability, rollout, acceptance criteria, and tests.
-4. Write `docs/sdd/status.json` with `{"status":"ready"}` only when implementation can proceed without unresolved product or architectural decisions. Otherwise write `{"status":"blocked","questions":[...]}` and stop.
-5. The implementation stage must read all SDD artifacts and refuse to edit product code unless status is `ready`.
-6. Implement the smallest coherent change, including tests for changed behavior.
-7. Run focused formatting, lint, type-check, and tests appropriate to the changed surface.
-8. Independently review the final diff for correctness, security, regressions, missing tests, and maintainability. Fix confirmed issues.
-9. Write `docs/sdd/VERIFICATION.md` with the exact commands run, observed results, remaining risks, and changed files.
+2. Record the Git baseline and dirty files. Refuse overlapping edits and preserve unrelated changes.
+3. Write `docs/sdd/PLAN.md` and `docs/sdd/SPEC.md` before implementation.
+4. Make the spec decision-complete: scope, non-goals, contracts, data flow, error cases, security, observability, rollout, stable `AC-NNN` criteria, allowed paths, and tests.
+5. Write `docs/sdd/status.json` against `contracts/sdd/status.schema.json`. Supervised runs stop at `awaiting_approval`; autonomous runs may use `ready` only when low risk and decision-complete. Otherwise use `blocked` with concise questions.
+6. The implementation stage must read every SDD artifact, confirm the run ID and baseline, and refuse product-code edits unless status is `ready` or explicit approval transitions `awaiting_approval` to `ready`.
+7. Implement the smallest coherent change, including tests for changed behavior.
+8. Run focused formatting, lint, type-check, and tests appropriate to the changed surface.
+9. Independently review the final diff for correctness, security, regressions, missing tests, and maintainability. Fix confirmed issues.
+10. Write `docs/sdd/VERIFICATION.md` with an AC-to-file-to-test matrix, exact commands, observed results, remaining risks, and changed files.
+11. Validate completed artifacts with `npm run validate:sdd -- --required`.
 
 ## Engineering rules
 

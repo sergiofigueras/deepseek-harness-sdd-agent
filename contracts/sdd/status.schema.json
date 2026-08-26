@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.invalid/sdd/status.schema.json",
+  "title": "SDD status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "approvalMode", "status", "questions", "acceptanceCriteria"],
+  "properties": {
+    "schemaVersion": {"const": "2.0"},
+    "runId": {"type": "string", "minLength": 8},
+    "approvalMode": {"enum": ["supervised", "autonomous"]},
+    "status": {"enum": ["blocked", "awaiting_approval", "ready", "implementing", "verifying", "verified"]},
+    "questions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "acceptanceCriteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "source", "plannedIn", "implementedBy", "verifiedBy"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^AC-[0-9]{3}$"},
+          "text": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
+          "plannedIn": {"type": "array", "items": {"type": "string"}},
+          "implementedBy": {"type": "array", "items": {"type": "string"}},
+          "verifiedBy": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

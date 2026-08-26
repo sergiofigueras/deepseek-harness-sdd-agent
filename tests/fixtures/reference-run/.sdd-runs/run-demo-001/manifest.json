@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "2.0",
+  "runId": "run-demo-001",
+  "requestHash": "sha256-demo-001",
+  "approvalMode": "supervised",
+  "git": {"baselineHead": "1234567", "dirtyFiles": []},
+  "stages": [
+    {"name": "plan-and-spec", "provider": "openai-architecture", "model": "gpt-5.5", "status": "completed", "commands": []},
+    {"name": "implementation", "provider": "openai-implementation", "model": "gpt-5.3-codex", "status": "completed", "commands": ["npm test"]},
+    {"name": "verification", "provider": "openai-architecture", "model": "gpt-5.5", "status": "completed", "commands": ["npm test"]}
+  ],
+  "artifacts": ["docs/sdd/PLAN.md", "docs/sdd/SPEC.md", "docs/sdd/status.json", "docs/sdd/VERIFICATION.md"]
+}

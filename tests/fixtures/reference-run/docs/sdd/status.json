@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "2.0",
+  "runId": "run-demo-001",
+  "approvalMode": "supervised",
+  "status": "verified",
+  "questions": [],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "text": "The example returns a stable, tested result.",
+      "source": "examples/sample-request.md:1",
+      "plannedIn": ["docs/sdd/SPEC.md"],
+      "implementedBy": ["src/example.ts"],
+      "verifiedBy": ["tests/example.test.ts"]
+    }
+  ]
+}

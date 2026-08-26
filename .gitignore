@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.dsh-home/
+/.sdd-runs/
+.serena/
+node_modules/
+coverage/
+dist/
+*.log
+*.zip
