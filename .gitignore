@@ -6,6 +6,7 @@
 !/.sdd-runs/interface-cua-20260827/manifest.json
 !/.sdd-runs/interface-cua-20260827/events.jsonl
 .serena/
+.local/
 node_modules/
 coverage/
 dist/
