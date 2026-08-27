@@ -82,7 +82,7 @@
       "text": "Checked-in live discovery, replay, and exceptional-state evidence",
       "source": "Assignment 4 and 6",
       "plannedIn": ["docs/sdd/requirements/08-demo-and-deliverables.md"],
-      "implementedBy": ["evidence/README.md", "evidence/live-example-capability.json"],
+      "implementedBy": ["evidence/README.md", "evidence/generator-metadata.json", "evidence/live-example-capability.json"],
       "verifiedBy": ["evidence/discovery-4e81c2ba-2518-4aed-8721-842aecc1300b/live-events.jsonl", "evidence/replay-507a5ba7-fd01-492b-9075-1d0bf10b87fe/deterministic-events.jsonl"]
     },
     {

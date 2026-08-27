@@ -34,6 +34,7 @@ const requiredFiles = [
   'docs/sdd/SPEC.md',
   'docs/sdd/status.json',
   'evidence/README.md',
+  'evidence/generator-metadata.json',
   'evidence/live-example-capability.json',
   'evidence/offline-demo-result.json',
   'evals/cases.jsonl',

@@ -9,6 +9,7 @@ All application data is synthetic. Run directories use random IDs; observations,
 - Log: `discovery-4e81c2ba-2518-4aed-8721-842aecc1300b/live-events.jsonl`
 - Screenshots: `initial.png` before navigation and `success.png` showing the completed live UI
 - Emitted capability: `live-example-capability.json`
+- Generator metadata: `generator-metadata.json` (sanitized command, UTC time, model, code revision, artifact hash, and run IDs)
 
 The JSONL records model observations and decisions, surface actions, policy decisions, and `run_completed`. The artifact provenance names this run. Discovery emitted a content-hashed draft; the checked-in artifact contains the explicit `codex-independent-review` approval and a recomputed canonical hash.
 

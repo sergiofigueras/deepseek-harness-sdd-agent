@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAtUtc": "2026-08-27T10:34:50.835Z",
+  "command": "npm run demo:discover -- --goal 'Look up the member using the supplied memberId and return the current savings balance' --member-id '<synthetic-member-id>' --artifact evidence/live-example-capability.json --evidence-root evidence",
+  "codeRevision": "cad8673",
+  "baselineRevision": "363b549d3bc5d1117cd511b28ed000069a4df75e",
+  "modelId": "gpt-5.4-mini",
+  "discoveryRunId": "discovery-4e81c2ba-2518-4aed-8721-842aecc1300b",
+  "artifactContentHash": "sha256:87d230a734212da8e9fa419cedf8420f843f9c8eba817a51099b3a6e6ab9926c",
+  "deterministicReplayRunId": "replay-507a5ba7-fd01-492b-9075-1d0bf10b87fe",
+  "notes": "The API key was supplied only through a hidden terminal prompt and was not persisted. cad8673 is the local implementation/evidence commit; the metadata itself is committed immediately afterward."
+}
