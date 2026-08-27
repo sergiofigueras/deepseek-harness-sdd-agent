@@ -1,7 +1,10 @@
 .DS_Store
 .env
 .dsh-home/
-/.sdd-runs/
+/.sdd-runs/*
+!/.sdd-runs/interface-cua-20260827/
+!/.sdd-runs/interface-cua-20260827/manifest.json
+!/.sdd-runs/interface-cua-20260827/events.jsonl
 .serena/
 node_modules/
 coverage/

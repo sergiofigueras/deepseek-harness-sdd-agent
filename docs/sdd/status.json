@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "2.0",
+  "runId": "interface-cua-20260827",
+  "approvalMode": "autonomous",
+  "status": "verified",
+  "questions": [],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "text": "Real goal-driven LLM loop against a live UI with stopping conditions",
+      "source": "Assignment 3.1",
+      "plannedIn": ["docs/sdd/requirements/01-goal-driven-agent-loop.md"],
+      "implementedBy": ["src/discovery.ts", "src/model.ts", "src/surface/playwright-surface.ts"],
+      "verifiedBy": ["tests/computer-use.test.ts", "evidence/discovery-4e81c2ba-2518-4aed-8721-842aecc1300b/live-events.jsonl"]
+    },
+    {
+      "id": "AC-002",
+      "text": "Typed versioned parameterized capability artifact",
+      "source": "Assignment 3.2",
+      "plannedIn": ["docs/sdd/requirements/02-structured-artifact.md"],
+      "implementedBy": ["src/contracts.ts", "src/artifact.ts", "contracts/capability.schema.json"],
+      "verifiedBy": ["tests/domain-policy.test.ts", "evidence/live-example-capability.json"]
+    },
+    {
+      "id": "AC-003",
+      "text": "Model-free deterministic replay and explicit outcome taxonomy",
+      "source": "Assignment 3.3",
+      "plannedIn": ["docs/sdd/requirements/03-deterministic-replay.md"],
+      "implementedBy": ["src/replay.ts", "contracts/run-result.schema.json"],
+      "verifiedBy": ["tests/computer-use.test.ts", "evidence/replay-507a5ba7-fd01-492b-9075-1d0bf10b87fe/deterministic-events.jsonl"]
+    },
+    {
+      "id": "AC-004",
+      "text": "Configurable allowlists and conservative action risk policy",
+      "source": "Assignment 3.4",
+      "plannedIn": ["docs/sdd/requirements/04-safety-policy.md"],
+      "implementedBy": ["src/policy.ts", "src/cli.ts", "contracts/policy.schema.json"],
+      "verifiedBy": ["tests/domain-policy.test.ts", "tests/computer-use.test.ts"]
+    },
+    {
+      "id": "AC-005",
+      "text": "No secrets or raw sensitive data in artifacts and logs",
+      "source": "Assignment 3.4",
+      "plannedIn": ["docs/sdd/requirements/04-safety-policy.md"],
+      "implementedBy": ["src/redaction.ts", "src/evidence.ts", "src/surface/playwright-surface.ts"],
+      "verifiedBy": ["tests/domain-policy.test.ts", "tests/computer-use.test.ts", "scripts/validate.mjs"]
+    },
+    {
+      "id": "AC-006",
+      "text": "Structured evidence with richer failure signals",
+      "source": "Assignment 3.5",
+      "plannedIn": ["docs/sdd/requirements/05-evidence-observability.md"],
+      "implementedBy": ["src/evidence.ts", "src/replay.ts"],
+      "verifiedBy": ["tests/computer-use.test.ts", "evidence/replay-7099a74b-4e26-4008-a74b-b595c46adcf5/permission_denied-step-03.sanitized.html"]
+    },
+    {
+      "id": "AC-007",
+      "text": "Same-session human intervention, control transfer, and resume",
+      "source": "Assignment 3.6",
+      "plannedIn": ["docs/sdd/requirements/06-human-handoff.md"],
+      "implementedBy": ["src/handoff.ts", "src/discovery.ts", "src/replay.ts", "src/cli.ts"],
+      "verifiedBy": ["tests/computer-use.test.ts", "evidence/replay-7a81a95a-6414-4b94-9bbb-db9ae9a97856/deterministic-events.jsonl"]
+    },
+    {
+      "id": "AC-008",
+      "text": "Surface abstraction and safe multi-tenant artifact specialization",
+      "source": "Assignment 3.7",
+      "plannedIn": ["docs/sdd/requirements/07-heterogeneity-scale.md"],
+      "implementedBy": ["src/surface/types.ts", "src/artifact.ts", "src/replay.ts"],
+      "verifiedBy": ["tests/domain-policy.test.ts", "tests/computer-use.test.ts"]
+    },
+    {
+      "id": "AC-009",
+      "text": "Non-trivial local legacy proxy with runtime exceptional states",
+      "source": "Assignment 4 and 5",
+      "plannedIn": ["docs/sdd/requirements/08-demo-and-deliverables.md"],
+      "implementedBy": ["src/demo/server.ts", "src/cli.ts"],
+      "verifiedBy": ["tests/computer-use.test.ts", "evidence/offline-demo-result.json"]
+    },
+    {
+      "id": "AC-010",
+      "text": "Checked-in live discovery, replay, and exceptional-state evidence",
+      "source": "Assignment 4 and 6",
+      "plannedIn": ["docs/sdd/requirements/08-demo-and-deliverables.md"],
+      "implementedBy": ["evidence/README.md", "evidence/live-example-capability.json"],
+      "verifiedBy": ["evidence/discovery-4e81c2ba-2518-4aed-8721-842aecc1300b/live-events.jsonl", "evidence/replay-507a5ba7-fd01-492b-9075-1d0bf10b87fe/deterministic-events.jsonl"]
+    },
+    {
+      "id": "AC-011",
+      "text": "README and seven-heading REPORT deliverables",
+      "source": "Assignment 6",
+      "plannedIn": ["docs/sdd/requirements/08-demo-and-deliverables.md"],
+      "implementedBy": ["README.md", "REPORT.md"],
+      "verifiedBy": ["scripts/validate.mjs", "docs/sdd/VERIFICATION.md"]
+    }
+  ]
+}

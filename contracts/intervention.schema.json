@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.local/contracts/intervention.schema.json",
+  "title": "Human intervention request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "interventionId",
+    "runId",
+    "goal",
+    "reason",
+    "state",
+    "observationFingerprint",
+    "allowedOperatorActions",
+    "requestedAt",
+    "requestedBy",
+    "lease"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "interventionId": { "type": "string", "minLength": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "capabilityId": { "type": "string", "minLength": 1 },
+    "goal": { "type": "string", "minLength": 1 },
+    "reason": {
+      "enum": [
+        "agent_stuck",
+        "unknown_runtime_state",
+        "policy_denied",
+        "risky_action_approval",
+        "replay_failure"
+      ]
+    },
+    "state": { "enum": ["pending", "claimed", "resolved", "cancelled"] },
+    "currentStepId": { "type": "string", "minLength": 1 },
+    "currentStepIndex": { "type": "integer", "minimum": 0 },
+    "observationFingerprint": { "type": "string", "minLength": 8 },
+    "screenshotPath": { "type": "string", "minLength": 1 },
+    "allowedOperatorActions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["navigate", "click", "type", "read", "wait", "complete", "escalate"]
+      }
+    },
+    "requestedAt": { "type": "string", "format": "date-time" },
+    "requestedBy": { "enum": ["discovery", "replay", "policy"] },
+    "lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["leaseId", "runId", "owner", "issuedAt"],
+      "properties": {
+        "leaseId": { "type": "string", "minLength": 1 },
+        "runId": { "type": "string", "minLength": 1 },
+        "owner": { "enum": ["automation", "human", "none"] },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolvedAt",
+        "resolvedBy",
+        "actionSummary",
+        "beforeFingerprint",
+        "afterFingerprint",
+        "resumeAutomation"
+      ],
+      "properties": {
+        "resolvedAt": { "type": "string", "format": "date-time" },
+        "resolvedBy": { "type": "string", "minLength": 1 },
+        "actionSummary": { "type": "string", "minLength": 1 },
+        "beforeFingerprint": { "type": "string", "minLength": 8 },
+        "afterFingerprint": { "type": "string", "minLength": 8 },
+        "resumeAutomation": { "type": "boolean" }
+      }
+    }
+  }
+}

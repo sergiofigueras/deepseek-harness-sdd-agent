@@ -1,0 +1,331 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "northstar.lookup-savings-balance",
+  "version": "1.0.0",
+  "name": "Look up synthetic member savings balance",
+  "description": "Searches the Northstar member console and returns the displayed savings balance.",
+  "application": {
+    "vendor": "Northstar",
+    "product": "Core Banking Training Console",
+    "baseUrlPattern": "http://127.0.0.1:54642",
+    "compatibleVersionRange": "demo-v1",
+    "driftFingerprint": "3f3f0c2405394fe14e80c09d"
+  },
+  "inputs": [
+    {
+      "name": "targetUrl",
+      "type": "string",
+      "description": "Allowlisted entry URL",
+      "required": true,
+      "sensitive": false,
+      "pattern": "^https?://"
+    },
+    {
+      "name": "memberId",
+      "type": "string",
+      "description": "Synthetic member identifier",
+      "required": true,
+      "sensitive": true,
+      "pattern": "^[0-9]{5,12}$"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "savingsBalance",
+      "type": "string",
+      "description": "Displayed synthetic savings balance",
+      "required": true,
+      "locator": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "generic",
+            "name": "Savings balance",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "[aria-label=\"Savings balance\"]"
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Accessible name first; attribute fallback within the stable workspace frame."
+      },
+      "extraction": "text"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-01",
+      "risk": "safe",
+      "description": "Open the allowlisted member-servicing entry point",
+      "timeoutMs": 10000,
+      "action": "navigate",
+      "value": {
+        "source": "input",
+        "name": "targetUrl"
+      }
+    },
+    {
+      "id": "step-02",
+      "risk": "safe",
+      "description": "Enter the invocation member identifier",
+      "timeoutMs": 5000,
+      "action": "type",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "textbox",
+            "name": "Member Number",
+            "exact": false
+          },
+          {
+            "strategy": "label",
+            "text": "Member Number",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "value": {
+        "source": "input",
+        "name": "memberId"
+      }
+    },
+    {
+      "id": "step-03",
+      "risk": "safe",
+      "description": "Submit the member search",
+      "timeoutMs": 5000,
+      "action": "click",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "button",
+            "name": "Find Member",
+            "exact": false
+          },
+          {
+            "strategy": "text",
+            "text": "Find Member",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "recoveryIds": [
+        "transient-load",
+        "known-interstitial"
+      ]
+    },
+    {
+      "id": "step-04",
+      "risk": "safe",
+      "description": "Wait for the legacy host response",
+      "timeoutMs": 1000,
+      "action": "wait",
+      "durationMs": 300
+    },
+    {
+      "id": "step-05",
+      "risk": "safe",
+      "description": "Read the requested savings balance",
+      "timeoutMs": 5000,
+      "action": "read",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "generic",
+            "name": "Savings balance",
+            "exact": false
+          },
+          {
+            "strategy": "text",
+            "text": "$1,284.44",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "outputName": "savingsBalance"
+    }
+  ],
+  "checkpoint": {
+    "kind": "visible",
+    "locator": {
+      "candidates": [
+        {
+          "strategy": "role",
+          "role": "heading",
+          "name": "Member located",
+          "exact": false
+        },
+        {
+          "strategy": "text",
+          "text": "Member located",
+          "exact": true
+        }
+      ],
+      "framePath": [
+        {
+          "strategy": "role",
+          "role": "iframe",
+          "name": "Legacy member servicing workspace",
+          "exact": false
+        },
+        {
+          "strategy": "css",
+          "selector": "iframe[name=\"legacyWorkspace\"]"
+        }
+      ],
+      "robustnessNote": "Semantic heading with exact visible-text fallback."
+    }
+  },
+  "businessOutcomes": [
+    {
+      "code": "member_not_found",
+      "description": "No synthetic member matches the supplied identifier.",
+      "condition": {
+        "kind": "visible",
+        "locator": {
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "heading",
+              "name": "Record not found",
+              "exact": false
+            },
+            {
+              "strategy": "text",
+              "text": "Record not found",
+              "exact": true
+            }
+          ],
+          "framePath": [
+            {
+              "strategy": "role",
+              "role": "iframe",
+              "name": "Legacy member servicing workspace",
+              "exact": false
+            },
+            {
+              "strategy": "css",
+              "selector": "iframe[name=\"legacyWorkspace\"]"
+            }
+          ],
+          "robustnessNote": "Declared business message, not an exception."
+        }
+      },
+      "data": {
+        "found": false
+      }
+    }
+  ],
+  "recoveries": [
+    {
+      "id": "known-interstitial",
+      "condition": "known_interstitial",
+      "maxAttempts": 1,
+      "backoffMs": 50,
+      "action": {
+        "id": "recovery-continue",
+        "action": "click",
+        "risk": "safe",
+        "description": "Dismiss the known daily notice",
+        "target": {
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Continue",
+              "exact": true
+            }
+          ],
+          "framePath": [
+            {
+              "strategy": "role",
+              "role": "iframe",
+              "name": "Legacy member servicing workspace",
+              "exact": false
+            },
+            {
+              "strategy": "css",
+              "selector": "iframe[name=\"legacyWorkspace\"]"
+            }
+          ],
+          "robustnessNote": "Known reversible interstitial control."
+        },
+        "timeoutMs": 2000
+      }
+    },
+    {
+      "id": "transient-load",
+      "condition": "transient_load",
+      "maxAttempts": 3,
+      "backoffMs": 250
+    }
+  ],
+  "declaredRisk": "safe",
+  "provenance": {
+    "discoveredAt": "2026-08-27T10:44:43.353Z",
+    "model": "scripted-fixture-model",
+    "sourceTarget": "http://127.0.0.1:54642",
+    "evidenceRunId": "discovery-7b479b4d-73fa-4ff7-ac66-86a40d98e136"
+  },
+  "review": {
+    "status": "approved",
+    "reviewedBy": "offline-demo-review",
+    "reviewedAt": "2026-08-27T10:44:43.361Z"
+  },
+  "contentHash": "sha256:6494f91f39702b322e02338d8e12d786e70b724999e9d062b636f5a31e2e9544"
+}

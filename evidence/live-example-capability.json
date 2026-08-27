@@ -1,0 +1,368 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "northstar.lookup-savings-balance",
+  "version": "1.0.0",
+  "name": "Look up synthetic member savings balance",
+  "description": "Searches the Northstar member console and returns the displayed savings balance.",
+  "application": {
+    "vendor": "Northstar",
+    "product": "Core Banking Training Console",
+    "baseUrlPattern": "http://127.0.0.1:54481",
+    "compatibleVersionRange": "demo-v1",
+    "driftFingerprint": "3f3f0c2405394fe14e80c09d"
+  },
+  "inputs": [
+    {
+      "name": "targetUrl",
+      "type": "string",
+      "description": "Allowlisted entry URL",
+      "required": true,
+      "sensitive": false,
+      "pattern": "^https?://"
+    },
+    {
+      "name": "memberId",
+      "type": "string",
+      "description": "Synthetic member identifier",
+      "required": true,
+      "sensitive": true,
+      "pattern": "^[0-9]{5,12}$"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "savingsBalance",
+      "type": "string",
+      "description": "Displayed synthetic savings balance",
+      "required": true,
+      "locator": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "generic",
+            "name": "Savings balance",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "[aria-label=\"Savings balance\"]"
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Accessible name first; attribute fallback within the stable workspace frame."
+      },
+      "extraction": "text"
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-01",
+      "risk": "safe",
+      "description": "The current URL is about:blank, so navigating to the target app is the appropriate first step and is safe.",
+      "timeoutMs": 10000,
+      "action": "navigate",
+      "value": {
+        "source": "input",
+        "name": "targetUrl"
+      }
+    },
+    {
+      "id": "step-02",
+      "risk": "safe",
+      "description": "Typing the declared memberId into the Member Number field is a safe step toward looking up the member.",
+      "timeoutMs": 5000,
+      "action": "type",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "textbox",
+            "name": "Member Number",
+            "exact": false
+          },
+          {
+            "strategy": "label",
+            "text": "Member Number",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "value": {
+        "source": "input",
+        "name": "memberId"
+      }
+    },
+    {
+      "id": "step-03",
+      "risk": "safe",
+      "description": "Populate the Member Number field with the declared memberId placeholder to proceed with the lookup.",
+      "timeoutMs": 5000,
+      "action": "type",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "textbox",
+            "name": "Member Number",
+            "exact": false
+          },
+          {
+            "strategy": "label",
+            "text": "Member Number",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "value": {
+        "source": "input",
+        "name": "memberId"
+      }
+    },
+    {
+      "id": "step-04",
+      "risk": "safe",
+      "description": "Typing the supplied memberId into the Member Number field is a safe, progress-making step toward looking up the member.",
+      "timeoutMs": 5000,
+      "action": "type",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "textbox",
+            "name": "Member Number",
+            "exact": false
+          },
+          {
+            "strategy": "label",
+            "text": "Member Number",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "value": {
+        "source": "input",
+        "name": "memberId"
+      }
+    },
+    {
+      "id": "step-05",
+      "risk": "safe",
+      "description": "The member number field is already populated, so clicking Find Member is the next safe step to retrieve the member record and progress toward the savings balance.",
+      "timeoutMs": 5000,
+      "action": "click",
+      "target": {
+        "candidates": [
+          {
+            "strategy": "role",
+            "role": "button",
+            "name": "Find Member",
+            "exact": false
+          }
+        ],
+        "framePath": [
+          {
+            "strategy": "role",
+            "role": "iframe",
+            "name": "Legacy member servicing workspace",
+            "exact": false
+          },
+          {
+            "strategy": "css",
+            "selector": "iframe[name=\"legacyWorkspace\"]"
+          }
+        ],
+        "robustnessNote": "Semantic role/name or label first; visible text fallback. Frame identity is independent of DOM nesting."
+      },
+      "recoveryIds": [
+        "transient-load",
+        "known-interstitial"
+      ]
+    },
+    {
+      "id": "step-06",
+      "risk": "safe",
+      "description": "The member lookup is already in progress and the UI is showing 'Loading member record...'. Waiting should allow the result, including the savings balance, to appear without taking any risky action.",
+      "timeoutMs": 1000,
+      "action": "wait",
+      "durationMs": 300
+    }
+  ],
+  "checkpoint": {
+    "kind": "visible",
+    "locator": {
+      "candidates": [
+        {
+          "strategy": "role",
+          "role": "heading",
+          "name": "Member located",
+          "exact": false
+        },
+        {
+          "strategy": "text",
+          "text": "Member located",
+          "exact": true
+        }
+      ],
+      "framePath": [
+        {
+          "strategy": "role",
+          "role": "iframe",
+          "name": "Legacy member servicing workspace",
+          "exact": false
+        },
+        {
+          "strategy": "css",
+          "selector": "iframe[name=\"legacyWorkspace\"]"
+        }
+      ],
+      "robustnessNote": "Semantic heading with exact visible-text fallback."
+    }
+  },
+  "businessOutcomes": [
+    {
+      "code": "member_not_found",
+      "description": "No synthetic member matches the supplied identifier.",
+      "condition": {
+        "kind": "visible",
+        "locator": {
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "heading",
+              "name": "Record not found",
+              "exact": false
+            },
+            {
+              "strategy": "text",
+              "text": "Record not found",
+              "exact": true
+            }
+          ],
+          "framePath": [
+            {
+              "strategy": "role",
+              "role": "iframe",
+              "name": "Legacy member servicing workspace",
+              "exact": false
+            },
+            {
+              "strategy": "css",
+              "selector": "iframe[name=\"legacyWorkspace\"]"
+            }
+          ],
+          "robustnessNote": "Declared business message, not an exception."
+        }
+      },
+      "data": {
+        "found": false
+      }
+    }
+  ],
+  "recoveries": [
+    {
+      "id": "known-interstitial",
+      "condition": "known_interstitial",
+      "maxAttempts": 1,
+      "backoffMs": 50,
+      "action": {
+        "id": "recovery-continue",
+        "action": "click",
+        "risk": "safe",
+        "description": "Dismiss the known daily notice",
+        "target": {
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Continue",
+              "exact": true
+            }
+          ],
+          "framePath": [
+            {
+              "strategy": "role",
+              "role": "iframe",
+              "name": "Legacy member servicing workspace",
+              "exact": false
+            },
+            {
+              "strategy": "css",
+              "selector": "iframe[name=\"legacyWorkspace\"]"
+            }
+          ],
+          "robustnessNote": "Known reversible interstitial control."
+        },
+        "timeoutMs": 2000
+      }
+    },
+    {
+      "id": "transient-load",
+      "condition": "transient_load",
+      "maxAttempts": 3,
+      "backoffMs": 250
+    }
+  ],
+  "declaredRisk": "safe",
+  "provenance": {
+    "discoveredAt": "2026-08-27T10:35:05.555Z",
+    "model": "gpt-5.4-mini",
+    "sourceTarget": "http://127.0.0.1:54481",
+    "evidenceRunId": "discovery-4e81c2ba-2518-4aed-8721-842aecc1300b"
+  },
+  "review": {
+    "status": "approved",
+    "reviewedBy": "codex-independent-review",
+    "reviewedAt": "2026-08-27T10:35:11.009Z"
+  },
+  "contentHash": "sha256:87d230a734212da8e9fa419cedf8420f843f9c8eba817a51099b3a6e6ab9926c"
+}

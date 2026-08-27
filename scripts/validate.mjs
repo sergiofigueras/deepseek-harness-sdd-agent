@@ -1,5 +1,5 @@
-import { readFileSync, statSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { relative, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
 import Ajv from 'ajv'
 import YAML from 'yaml'
@@ -13,6 +13,7 @@ const requiredFiles = [
   '.gitignore',
   'AGENTS.md',
   'CHANGELOG.md',
+  'REPORT.md',
   'LICENSE',
   'LINKEDIN_POST.md',
   'README.md',
@@ -23,15 +24,41 @@ const requiredFiles = [
   'contracts/sdd/manifest.schema.json',
   'contracts/sdd/status.schema.json',
   'contracts/sdd/verification.schema.json',
+  'contracts/capability.schema.json',
+  'contracts/intervention.schema.json',
+  'contracts/policy.schema.json',
+  'contracts/run-result.schema.json',
   'docs/ARCHITECTURE.md',
   'docs/EVALUATION.md',
+  'docs/sdd/PLAN.md',
+  'docs/sdd/SPEC.md',
+  'docs/sdd/status.json',
+  'evidence/README.md',
+  'evidence/live-example-capability.json',
+  'evidence/offline-demo-result.json',
   'evals/cases.jsonl',
   'examples/sample-request.md',
   'package-lock.json',
   'scripts/bootstrap.sh',
   'scripts/launch.sh',
   'scripts/simulate-e2e.mjs',
-  'scripts/validate-sdd.mjs'
+  'scripts/validate-sdd.mjs',
+  'src/artifact.ts',
+  'src/cli.ts',
+  'src/contracts.ts',
+  'src/demo/server.ts',
+  'src/discovery.ts',
+  'src/evidence.ts',
+  'src/handoff.ts',
+  'src/model.ts',
+  'src/policy.ts',
+  'src/redaction.ts',
+  'src/replay.ts',
+  'src/surface/playwright-surface.ts',
+  'src/surface/types.ts',
+  'tests/computer-use.test.ts',
+  'tests/domain-policy.test.ts',
+  'tsconfig.json',
 ]
 
 const failures = []
@@ -81,6 +108,7 @@ if (existing.includes('config/settings.yaml')) {
 }
 
 const ajv = new Ajv({ allErrors: true, strict: false })
+ajv.addFormat('date-time', value => Number.isFinite(Date.parse(value)))
 for (const file of existing.filter(file => file.startsWith('contracts/') && file.endsWith('.json'))) {
   try {
     ajv.compile(JSON.parse(read(file)))
@@ -89,9 +117,25 @@ for (const file of existing.filter(file => file.startsWith('contracts/') && file
   }
 }
 
-const textFiles = existing.filter(file => /\.(md|yaml|yml|sh|json|mjs)$/.test(file))
+const gitFiles = spawnSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' })
+const repositoryFiles = gitFiles.status === 0
+  ? gitFiles.stdout.trim().split('\n').filter(Boolean)
+  : collectProjectFiles(root)
+const textFiles = repositoryFiles.filter(file => /\.(md|yaml|yml|sh|json|jsonl|mjs|ts)$/.test(file))
 const trackedText = textFiles.map(read).join('\n')
 if (/\bsk-[A-Za-z0-9_-]{12,}\b/.test(trackedText)) failures.push('security: possible API key in tracked content')
+
+function collectProjectFiles(directory) {
+  const ignored = new Set(['.git', 'node_modules', '.dsh-home', '.serena'])
+  const files = []
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (ignored.has(entry.name)) continue
+    const absolute = resolve(directory, entry.name)
+    if (entry.isDirectory()) files.push(...collectProjectFiles(absolute))
+    else if (entry.isFile()) files.push(relative(root, absolute))
+  }
+  return files
+}
 
 for (const script of ['scripts/bootstrap.sh', 'scripts/launch.sh']) {
   if (!existing.includes(script)) continue

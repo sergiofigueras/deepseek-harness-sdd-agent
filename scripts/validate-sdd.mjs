@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { isAbsolute, relative, resolve } from 'node:path'
 import Ajv from 'ajv'
 
 const args = process.argv.slice(2)
@@ -27,6 +27,32 @@ const validateStatus = ajv.compile(statusSchema)
 
 const failures = []
 if (!validateStatus(status)) failures.push(`status.json: ${ajv.errorsText(validateStatus.errors)}`)
+
+if (required) {
+  const requiredSddPaths = [
+    'docs/sdd/PLAN.md',
+    'docs/sdd/SPEC.md',
+    'docs/sdd/requirements/01-goal-driven-agent-loop.md',
+    'docs/sdd/requirements/02-structured-artifact.md',
+    'docs/sdd/requirements/03-deterministic-replay.md',
+    'docs/sdd/requirements/04-safety-policy.md',
+    'docs/sdd/requirements/05-evidence-observability.md',
+    'docs/sdd/requirements/06-human-handoff.md',
+    'docs/sdd/requirements/07-heterogeneity-scale.md',
+    'docs/sdd/requirements/08-demo-and-deliverables.md'
+  ]
+  const plannedInPaths = status.acceptanceCriteria?.flatMap(item => item.plannedIn ?? []) ?? []
+
+  for (const artifactPath of new Set([...requiredSddPaths, ...plannedInPaths])) {
+    const resolvedPath = resolve(targetRoot, artifactPath)
+    const relativePath = relative(targetRoot, resolvedPath)
+    if (isAbsolute(artifactPath) || relativePath.startsWith('..') || isAbsolute(relativePath)) {
+      failures.push(`plannedIn path must stay within the SDD root: ${artifactPath}`)
+    } else if (!existsSync(resolvedPath)) {
+      failures.push(`required SDD artifact missing: ${artifactPath}`)
+    }
+  }
+}
 
 const ids = status.acceptanceCriteria?.map(item => item.id) ?? []
 if (new Set(ids).size !== ids.length) failures.push('status.json: acceptance-criterion ids must be unique')

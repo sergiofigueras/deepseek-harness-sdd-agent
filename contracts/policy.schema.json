@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.local/contracts/policy.schema.json",
+  "title": "Computer-use automation policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "allowedOrigins",
+    "allowedRoutes",
+    "allowedActions",
+    "maximumTextLength",
+    "risk",
+    "sensitiveFields",
+    "approvalTtlMs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "allowedOrigins": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^https?://[^/]+$" }
+    },
+    "allowedRoutes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^/" }
+    },
+    "allowedActions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["navigate", "click", "type", "read", "wait", "complete", "escalate"]
+      }
+    },
+    "maximumTextLength": { "type": "integer", "minimum": 0 },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["safe", "risky", "irreversible"],
+      "properties": {
+        "safe": { "enum": ["allow", "deny"] },
+        "risky": { "enum": ["require_approval", "deny"] },
+        "irreversible": { "const": "deny" }
+      }
+    },
+    "sensitiveFields": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "approvalTtlMs": { "type": "integer", "minimum": 1, "maximum": 86400000 }
+  }
+}

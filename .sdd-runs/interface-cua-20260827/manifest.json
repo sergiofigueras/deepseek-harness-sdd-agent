@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "2.0",
+  "runId": "interface-cua-20260827",
+  "requestHash": "sha256:assignment-computer-use-automation-20260827",
+  "approvalMode": "autonomous",
+  "git": {"baselineHead":"363b549d3bc5d1117cd511b28ed000069a4df75e","dirtyFiles":[]},
+  "stages": [
+    {"name":"plan-and-spec","provider":"codex","model":"gpt-5","status":"completed","commands":["pdfplumber extraction and rendered-page inspection","git baseline inspection"]},
+    {"name":"implementation","provider":"codex","model":"gpt-5","status":"completed","commands":["TypeScript capability recorder, deterministic replay, policy, evidence, handoff, and legacy demo implementation","eight requirement-specific SDDs and assignment deliverables"]},
+    {"name":"verification","provider":"codex","model":"gpt-5","status":"completed","commands":["npm run typecheck","npm test","npm run validate:sdd -- --required","genuine OpenAI Responses API discovery and zero-model replay","git diff --check"]}
+  ],
+  "artifacts":["docs/sdd/PLAN.md","docs/sdd/SPEC.md","docs/sdd/status.json","docs/sdd/VERIFICATION.md","docs/sdd/requirements/01-goal-driven-agent-loop.md","docs/sdd/requirements/02-structured-artifact.md","docs/sdd/requirements/03-deterministic-replay.md","docs/sdd/requirements/04-safety-policy.md","docs/sdd/requirements/05-evidence-observability.md","docs/sdd/requirements/06-human-handoff.md","docs/sdd/requirements/07-heterogeneity-scale.md","docs/sdd/requirements/08-demo-and-deliverables.md","README.md","REPORT.md","evidence/README.md","evidence/live-example-capability.json"]
+}

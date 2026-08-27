@@ -5,20 +5,32 @@
   "description": "Model-routed SDD coding agent starter kit for DeepSeek Harness",
   "type": "module",
   "scripts": {
-    "test": "npm run validate && npm run test:contracts && npm run simulate:e2e && npm run validate:fixture",
+    "test": "npm run validate && npm run typecheck && npm run test:contracts && npm run test:assignment && npm run simulate:e2e && npm run validate:fixture",
     "validate": "node scripts/validate.mjs",
     "validate:sdd": "node scripts/validate-sdd.mjs",
     "validate:fixture": "node scripts/validate-sdd.mjs --root tests/fixtures/reference-run",
     "test:contracts": "node --test tests/*.test.mjs",
+    "test:assignment": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
     "simulate:e2e": "node scripts/simulate-e2e.mjs",
     "bootstrap": "bash scripts/bootstrap.sh",
-    "start": "bash scripts/launch.sh"
+    "start": "bash scripts/launch.sh",
+    "demo:server": "tsx src/demo/server.ts",
+    "demo:discover": "tsx src/cli.ts discover",
+    "demo:approve": "tsx src/cli.ts approve",
+    "demo:replay": "tsx src/cli.ts replay",
+    "demo:offline": "tsx src/cli.ts offline"
   },
   "engines": {
     "node": ">=22.19.0"
   },
   "devDependencies": {
+    "@types/node": "22.20.1",
     "ajv": "8.20.0",
+    "openai": "7.7.0",
+    "playwright": "1.62.1",
+    "tsx": "4.23.12",
+    "typescript": "5.9.3",
     "yaml": "2.9.0"
   },
   "license": "MIT"

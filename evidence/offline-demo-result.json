@@ -1,0 +1,235 @@
+{
+  "discovery": {
+    "kind": "success",
+    "runId": "discovery-7b479b4d-73fa-4ff7-ac66-86a40d98e136",
+    "logPath": "evidence/discovery-7b479b4d-73fa-4ff7-ac66-86a40d98e136/fixture-events.jsonl",
+    "model": "scripted-fixture-model"
+  },
+  "replaySuccess": {
+    "kind": "success",
+    "runId": "replay-a8bc2bf4-3d6d-4930-b6c5-1e8e5535a8c0",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:43.362Z",
+    "finishedAt": "2026-08-27T10:44:44.064Z",
+    "evidence": {
+      "logPath": "evidence/replay-a8bc2bf4-3d6d-4930-b6c5-1e8e5535a8c0/deterministic-events.jsonl"
+    },
+    "outputs": {
+      "savingsBalance": "$1,284.44"
+    },
+    "recoveriesApplied": [
+      "transient-load"
+    ]
+  },
+  "replayNotFound": {
+    "kind": "business_outcome",
+    "runId": "replay-c81a9124-3d5c-455e-89ac-2ec97e558420",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:44.064Z",
+    "finishedAt": "2026-08-27T10:44:44.428Z",
+    "evidence": {
+      "logPath": "evidence/replay-c81a9124-3d5c-455e-89ac-2ec97e558420/deterministic-events.jsonl"
+    },
+    "outcome": "member_not_found",
+    "description": "No synthetic member matches the supplied identifier.",
+    "data": {
+      "found": false
+    }
+  },
+  "replayHandoff": {
+    "kind": "success",
+    "runId": "replay-7a81a95a-6414-4b94-9bbb-db9ae9a97856",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:44.428Z",
+    "finishedAt": "2026-08-27T10:44:45.187Z",
+    "evidence": {
+      "logPath": "evidence/replay-7a81a95a-6414-4b94-9bbb-db9ae9a97856/deterministic-events.jsonl"
+    },
+    "outputs": {
+      "savingsBalance": "$1,284.44"
+    },
+    "recoveriesApplied": [
+      "transient-load"
+    ]
+  },
+  "replayFailure": {
+    "kind": "failure",
+    "runId": "replay-7099a74b-4e26-4008-a74b-b595c46adcf5",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:45.187Z",
+    "finishedAt": "2026-08-27T10:44:45.571Z",
+    "evidence": {
+      "logPath": "evidence/replay-7099a74b-4e26-4008-a74b-b595c46adcf5/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-7099a74b-4e26-4008-a74b-b595c46adcf5/permission_denied-step-03.png",
+      "htmlSnapshotPath": "evidence/replay-7099a74b-4e26-4008-a74b-b595c46adcf5/permission_denied-step-03.sanitized.html"
+    },
+    "failure": {
+      "category": "permission_denied",
+      "message": "The application denied permission",
+      "stepId": "step-03",
+      "stepIndex": 2,
+      "expected": "authorized member view",
+      "observed": "[main] Northstar Core Banking Member Servicing Console Training environment - synthetic records only.\n[Member Inquiry] MEMBER INQUIRY Member Number Find Member Permission denied Your operator role cannot view balances.",
+      "retryable": false
+    }
+  },
+  "replayInterstitial": {
+    "kind": "success",
+    "runId": "replay-4c1606f3-9922-4af1-bd11-cfbce2973426",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:45.571Z",
+    "finishedAt": "2026-08-27T10:44:46.291Z",
+    "evidence": {
+      "logPath": "evidence/replay-4c1606f3-9922-4af1-bd11-cfbce2973426/deterministic-events.jsonl"
+    },
+    "outputs": {
+      "savingsBalance": "$1,284.44"
+    },
+    "recoveriesApplied": [
+      "transient-load",
+      "known-interstitial"
+    ]
+  },
+  "replayExpired": {
+    "kind": "failure",
+    "runId": "replay-4fd422ec-7a50-4ec3-af90-27d449a3c8d7",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:46.291Z",
+    "finishedAt": "2026-08-27T10:44:46.672Z",
+    "evidence": {
+      "logPath": "evidence/replay-4fd422ec-7a50-4ec3-af90-27d449a3c8d7/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-4fd422ec-7a50-4ec3-af90-27d449a3c8d7/session_expired-step-03.png",
+      "htmlSnapshotPath": "evidence/replay-4fd422ec-7a50-4ec3-af90-27d449a3c8d7/session_expired-step-03.sanitized.html"
+    },
+    "failure": {
+      "category": "session_expired",
+      "message": "The application session expired",
+      "stepId": "step-03",
+      "stepIndex": 2,
+      "expected": "active session",
+      "observed": "[main] Northstar Core Banking Member Servicing Console Training environment - synthetic records only.\n[Member Inquiry] MEMBER INQUIRY Member Number Find Member Session expired Sign in again before continuing.",
+      "retryable": false
+    }
+  },
+  "replayValidation": {
+    "kind": "failure",
+    "runId": "replay-0fb373b6-77ed-4556-847d-62b10272beab",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:46.672Z",
+    "finishedAt": "2026-08-27T10:44:47.056Z",
+    "evidence": {
+      "logPath": "evidence/replay-0fb373b6-77ed-4556-847d-62b10272beab/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-0fb373b6-77ed-4556-847d-62b10272beab/invalid_invocation-step-03.png",
+      "htmlSnapshotPath": "evidence/replay-0fb373b6-77ed-4556-847d-62b10272beab/invalid_invocation-step-03.sanitized.html"
+    },
+    "failure": {
+      "category": "invalid_invocation",
+      "message": "The application rejected the supplied input",
+      "stepId": "step-03",
+      "stepIndex": 2,
+      "expected": "valid application input",
+      "observed": "[main] Northstar Core Banking Member Servicing Console Training environment - synthetic records only.\n[Member Inquiry] MEMBER INQUIRY Member Number Find Member Validation error The host rejected this synthetic value.",
+      "retryable": false
+    }
+  },
+  "replayRetryExhausted": {
+    "kind": "failure",
+    "runId": "replay-9f06540a-c57b-4fa3-936e-e4d50834b425",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:47.056Z",
+    "finishedAt": "2026-08-27T10:44:48.708Z",
+    "evidence": {
+      "logPath": "evidence/replay-9f06540a-c57b-4fa3-936e-e4d50834b425/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-9f06540a-c57b-4fa3-936e-e4d50834b425/retry_exhausted-step-03.png",
+      "htmlSnapshotPath": "evidence/replay-9f06540a-c57b-4fa3-936e-e4d50834b425/retry_exhausted-step-03.sanitized.html"
+    },
+    "failure": {
+      "category": "retry_exhausted",
+      "message": "Recovery transient-load exhausted 3 attempts",
+      "stepId": "step-03",
+      "stepIndex": 2,
+      "expected": "loading state cleared",
+      "observed": "[main] Northstar Core Banking Member Servicing Console Training environment - synthetic records only.\n[Member Inquiry] MEMBER INQUIRY Member Number Find Member Loading member record...",
+      "retryable": true
+    }
+  },
+  "replayMissingLocator": {
+    "kind": "failure",
+    "runId": "replay-8b09ed0d-9877-4ee6-9427-c22b819b2587",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:48.708Z",
+    "finishedAt": "2026-08-27T10:44:48.775Z",
+    "evidence": {
+      "logPath": "evidence/replay-8b09ed0d-9877-4ee6-9427-c22b819b2587/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-8b09ed0d-9877-4ee6-9427-c22b819b2587/target_missing-step-02.png",
+      "htmlSnapshotPath": "evidence/replay-8b09ed0d-9877-4ee6-9427-c22b819b2587/target_missing-step-02.sanitized.html"
+    },
+    "failure": {
+      "category": "target_missing",
+      "message": "No locator candidate matched: role=textbox name=Missing Member Field",
+      "stepId": "step-02",
+      "stepIndex": 1,
+      "expected": "Deliberately missing target used to verify hard-failure classification.",
+      "observed": "[main] Northstar Core Banking Member Servicing Console Training environment - synthetic records only.\n[Member Inquiry] MEMBER INQUIRY Member Number Find Member",
+      "retryable": false
+    }
+  },
+  "replayDriftMismatch": {
+    "kind": "failure",
+    "runId": "replay-ef6651f5-1496-46e9-a748-f5dcb4528fd6",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:48.775Z",
+    "finishedAt": "2026-08-27T10:44:48.824Z",
+    "evidence": {
+      "logPath": "evidence/replay-ef6651f5-1496-46e9-a748-f5dcb4528fd6/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-ef6651f5-1496-46e9-a748-f5dcb4528fd6/checkpoint_mismatch-step-01.png",
+      "htmlSnapshotPath": "evidence/replay-ef6651f5-1496-46e9-a748-f5dcb4528fd6/checkpoint_mismatch-step-01.sanitized.html"
+    },
+    "failure": {
+      "category": "checkpoint_mismatch",
+      "message": "Application drift fingerprint does not match the approved artifact",
+      "stepId": "step-01",
+      "stepIndex": 0,
+      "expected": "deliberate-drift-mismatch",
+      "observed": "3f3f0c2405394fe14e80c09d",
+      "retryable": false
+    }
+  },
+  "replayRiskDenied": {
+    "kind": "failure",
+    "runId": "replay-e10ee484-4360-4d80-9052-238e302f4c94",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:48.825Z",
+    "finishedAt": "2026-08-27T10:44:48.891Z",
+    "evidence": {
+      "logPath": "evidence/replay-e10ee484-4360-4d80-9052-238e302f4c94/deterministic-events.jsonl",
+      "screenshotPath": "evidence/replay-e10ee484-4360-4d80-9052-238e302f4c94/policy_denied-step-03.png",
+      "htmlSnapshotPath": "evidence/replay-e10ee484-4360-4d80-9052-238e302f4c94/policy_denied-step-03.sanitized.html"
+    },
+    "failure": {
+      "category": "policy_denied",
+      "message": "A run-bound approval is required for this risky action.",
+      "stepId": "step-03",
+      "stepIndex": 2,
+      "expected": "allowed click",
+      "observed": "approval_required",
+      "retryable": false
+    }
+  },
+  "replayRiskApproved": {
+    "kind": "success",
+    "runId": "replay-e10ee484-4360-4d80-9052-238e302f4c94-approved",
+    "capabilityId": "northstar.lookup-savings-balance",
+    "startedAt": "2026-08-27T10:44:48.891Z",
+    "finishedAt": "2026-08-27T10:44:49.583Z",
+    "evidence": {
+      "logPath": "evidence/replay-e10ee484-4360-4d80-9052-238e302f4c94-approved/deterministic-events.jsonl"
+    },
+    "outputs": {
+      "savingsBalance": "$1,284.44"
+    },
+    "recoveriesApplied": [
+      "transient-load"
+    ]
+  }
+}

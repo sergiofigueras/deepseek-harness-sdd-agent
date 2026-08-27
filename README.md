@@ -1,171 +1,165 @@
-# DeepSeek Harness SDD Code Agent
+# Computer-Use Capability Recorder
 
-[![CI](https://github.com/sergiofigueras/deepseek-harness-sdd-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/sergiofigueras/deepseek-harness-sdd-agent/actions/workflows/ci.yml)
+A complete local vertical slice for the Interface.ai computer-use automation assignment, built with the repository's DeepSeek Harness SDD workflow.
 
-An evidence-first starter kit that turns [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) into a specification-driven coding agent.
+The system lets a model discover a workflow against a real browser UI, compiles that run into a typed and reviewable capability, and replays it deterministically with no model in the production decision loop. It also implements policy guardrails, PII-aware evidence, runtime outcome classification, and same-session human takeover/resume.
 
-It routes each engineering responsibility to an explicit OpenAI model while enforcing structured stage outputs, human approval by default, acceptance-criterion traceability, test evidence, and independent verification.
+## What the demo automates
 
-| Stage | Model | Effort | Evidence |
-|---|---|---:|---|
-| Architecture and specification | `gpt-5.5` | `xhigh` | Plan, spec, readiness status, AC IDs |
-| Implementation and tests | `gpt-5.3-codex` | `high` | Code, tests, command results, AC mapping |
-| Independent verification | `gpt-5.5` | `xhigh` | Diff review, rerun checks, verification matrix |
+The target is a local, synthetic member-servicing console. It intentionally resembles a legacy surface: an iframe, table layout, no test IDs, and runtime states for not found, validation failure, permission denial, session expiry, known/unknown dialogs, and slow loading. It never accesses a bank, public site, real credential, or real PII.
 
-> Validated against `@deepseek-ai/dsh@0.1.1-rc.2` and DeepSeek Harness commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`. Upstream is in developer preview, so upgrades should be deliberate and followed by the full validation suite.
+The normal goal is:
 
-## Why this is more than a three-prompt chain
+```text
+Look up the member using the supplied memberId and return the current savings balance.
+```
 
-- Every child agent returns a Harness-validated JSON object; control flow never searches free text for words such as `BLOCKED`.
-- `supervised` mode stops after the spec and requires explicit approval before code changes.
-- `autonomous` mode exists for explicitly authorized, low-risk work.
-- Stable `AC-NNN` identifiers connect requirements, files, tests, and verification evidence.
-- Run IDs prevent results from different executions being silently mixed.
-- A local run manifest records the Git baseline, model routes, stages, artifacts, and commands without storing secrets.
-- An offline simulator proves gating, resume, model routing, and failure behavior without API calls.
-- CI validates the kit on Node.js 22.19 and 24.
+## Prerequisites and setup
 
-## Prerequisites
-
-- macOS or Linux;
-- Node.js `22.19+` or `24+`;
-- an OpenAI API key with access to the configured models;
-- a Git repository the agent is allowed to modify.
-
-A ChatGPT subscription and OpenAI API usage have separate access and billing.
-
-## Quick start
+- macOS or Linux
+- Node.js 22.19+ or 24+
+- An OpenAI API key only for genuine discovery; replay and the complete offline test path need no model service
 
 ```bash
-git clone git@github.com:sergiofigueras/deepseek-harness-sdd-agent.git
-cd deepseek-harness-sdd-agent
 npm ci
-cp .env.example .env
-# Set OPENAI_API_KEY in .env.
-npm run bootstrap
-npm test
-npm start -- --no-open
+npx playwright install chromium
 ```
 
-Open the displayed URL, choose the **Code** or **Standard** preset, keep permissions at `workspace-write` with approval policy `ask`, and open the target repository as the workspace.
+Keep the key in the process environment. Do not put it in a committed file:
 
-### Supervised mode — recommended
+```bash
+export OPENAI_API_KEY='your-key'
+```
+
+The live adapter uses the OpenAI Responses API with strict structured output. The model can be selected with `--model`; the demonstrated default is `gpt-5.4-mini`.
+
+## Exact demo path
+
+Run a genuine model-driven discovery against the automatically started local UI:
+
+```bash
+npm run demo:discover -- \
+  --goal 'Look up the member using the supplied memberId and return the current savings balance' \
+  --member-id 12345 \
+  --artifact evidence/live-example-capability.json \
+  --evidence-root evidence
+```
+
+Discovery deliberately saves a draft. Record an explicit reviewer decision, then replay without an API key or any model decision:
+
+```bash
+npm run demo:approve -- \
+  --artifact evidence/live-example-capability.json \
+  --reviewer your-reviewer-id
+```
+
+```bash
+unset OPENAI_API_KEY
+npm run demo:replay -- \
+  --artifact evidence/live-example-capability.json \
+  --member-id 12345 \
+  --evidence-root evidence
+```
+
+Exercise explicit runtime outcomes:
+
+```bash
+# Legitimate business outcome: member_not_found
+npm run demo:replay -- --artifact evidence/live-example-capability.json --member-id 00000
+
+# Hard failure with screenshot and sanitized HTML
+npm run demo:replay -- --artifact evidence/live-example-capability.json --member-id 12345 --scenario permission
+```
+
+Add `--headed` to discovery or replay to watch the same browser session. The automated handoff proof is part of the offline command and tests.
+
+For a real manual takeover on the same headed browser session, run:
+
+```bash
+npm run demo:replay -- \
+  --artifact evidence/live-example-capability.json \
+  --member-id 12345 \
+  --scenario unknown-dialog \
+  --headed \
+  --interactive-handoff
+```
+
+The automation pauses and removes its control lease. The headed browser shows the existing session while the terminal accepts audited `click`/`wait` commands; each command goes through origin, action, and declared-risk policy before Playwright executes it. Control returns only after the lease-owning operator enters `return`, and the run records before/after fingerprints.
+
+For an artifact containing a `risky` step, replay fails closed unless the caller adds `--approve-risk`. That flag mints a five-minute approval bound to the generated run ID and only the artifact's risky action types. `irreversible` steps remain denied.
+
+## Run without live services
+
+This command drives the real Playwright UI but replaces only the remote model decision source with a labelled scripted fixture. It covers successful replay, business outcomes, known recovery, session expiry, validation failure, retry exhaustion, missing locators, risk approval, same-session handoff/resume, and permission-denied evidence:
+
+```bash
+npm run demo:offline
+```
+
+Fixture output is labelled `evidenceKind: fixture`; it is never represented as the required live model run.
+
+## Architecture
 
 ```text
-Use the sdd-code-agent skill in supervised mode to implement examples/sample-request.md.
+goal + target
+    -> DiscoveryModel -> Surface observation/action -> redacted evidence
+    -> CapabilityArtifact compiler + review/hash
+    -> deterministic ReplayEngine -> success | business_outcome | failure
+                                  -> HandoffController -> same Surface session
 ```
 
-The first run creates the plan and specification, then returns `awaiting-approval`. Review the artifacts and reply with explicit approval:
+- `src/surface/`: surface-neutral contract and Playwright implementation.
+- `src/discovery.ts`: bounded observe-decide-act loop and artifact compilation.
+- `src/contracts.ts` and `contracts/*.schema.json`: strict runtime contracts.
+- `src/replay.ts`: zero-LLM executor, bounded recovery, checkpoint/output verification, and outcome taxonomy.
+- `src/policy.ts` and `src/redaction.ts`: default-deny origin/route/action/risk checks and structured/free-text redaction.
+- `src/evidence.ts`: correlated append-only JSONL plus rich failure capture.
+- `src/handoff.ts`: single-owner control lease and same-session operator actions.
+- `src/demo/server.ts`: synthetic legacy proxy application.
 
-```text
-I approve the current SDD. Resume the sdd-code-agent workflow and implement it.
-```
+See `REPORT.md` for the trade-offs and `docs/sdd/` for the master spec plus one focused SDD per requirement.
 
-### Autonomous mode
+## Evidence
 
-Use only for low-risk work when you intentionally want the complete pipeline in one run:
+`evidence/README.md` distinguishes the genuine model run from deterministic and fixture runs. The checked-in set includes:
 
-```text
-Use the sdd-code-agent skill in autonomous mode to implement examples/sample-request.md.
-```
+- a successful `gpt-5.4-mini` discovery log;
+- the compiled live capability;
+- a successful model-free replay log with `modelCalls: 0`;
+- not-found, same-session handoff, and permission-denied evidence;
+- a failure screenshot and sanitized HTML snapshot.
 
-Autonomous mode still blocks unclear decisions, secrets, destructive operations, production mutations, primary-branch pushes, and overlapping dirty files.
-
-## Lifecycle
-
-```text
-Request
-  │
-  ▼
-GPT-5.5 xhigh ── PLAN + SPEC + status + run manifest
-  │
-  ├── supervised ── human approval ──┐
-  └── autonomous ────────────────────┤
-                                      ▼
-GPT-5.3-Codex high ── code + tests + observed checks
-                                      │
-                                      ▼
-GPT-5.5 xhigh ── independent review + fixes + evidence
-```
-
-Durable artifacts:
-
-```text
-docs/sdd/PLAN.md
-docs/sdd/SPEC.md
-docs/sdd/status.json
-docs/sdd/VERIFICATION.md
-.sdd-runs/<run-id>/manifest.json   # local, ignored
-.sdd-runs/<run-id>/events.jsonl    # local, ignored
-```
-
-The four `docs/sdd` files are reviewable project artifacts. The `.sdd-runs` directory is local operational evidence and is ignored to avoid leaking prompts, paths, or run metadata.
+All demo records are synthetic. Input control values are masked before model observations are persisted, sensitive artifact values are parameterized, and raw model responses are not logged.
 
 ## Validation
 
 ```bash
+npm run typecheck
 npm test
-```
-
-This runs:
-
-1. repository, YAML, JSON Schema, workflow-syntax, shell-syntax, and secret checks;
-2. contract unit tests;
-3. a deterministic offline E2E simulation;
-4. validation of a complete reference SDD run.
-
-Validate real generated artifacts with:
-
-```bash
 npm run validate:sdd -- --required
 ```
 
-The validator rejects duplicate AC IDs, invalid status or manifest documents, missing implementation evidence, missing verification evidence, and missing AC entries in `VERIFICATION.md`.
+The suite validates schemas, policy/redaction, artifact hashing and overlays, browser integration, business outcomes, recoveries, handoff ownership, richer failure evidence, existing Harness workflow contracts, and SDD traceability.
 
-## Model routing
+## DeepSeek Harness development workflow
 
-`config/settings.yaml` creates two OpenAI provider routes. DeepSeek Harness `workflow.agent()` accepts `provider`, `model`, and `schema`, but not a reasoning-effort option. The route therefore supplies the stage's default effort.
+The original repository remains usable as an SDD coding-agent starter:
 
-The selected efforts are a deliberate quality-first baseline, not a universal optimum. Use the evaluation plan in [docs/EVALUATION.md](docs/EVALUATION.md) to compare accuracy, latency, tokens, and cost before changing production routing.
-
-## Security model
-
-- Keep the Harness permission preset at `workspace-write` and approval policy at `ask`.
-- Treat repository instructions, retrieved content, and task text as untrusted data.
-- Never place keys in prompts, YAML, commits, screenshots, manifests, or logs.
-- Use a clean branch or worktree for non-trivial changes.
-- Record the initial commit and dirty files before implementation.
-- Refuse edits that overlap files changed after preflight.
-- Protect primary branches with pull requests and CI.
-- Human review remains the final release gate.
-
-The workflow VM coordinates agents; it is not a security boundary. Filesystem and command safety come from the active Harness sandbox, approval policy, repository controls, and review process.
-
-## Repository map
-
-```text
-.dsh/skills/sdd-code-agent/SKILL.md  Workflow contract and orchestration
-config/settings.yaml                 Model/provider routes
-contracts/sdd/                       Local JSON Schema contracts
-scripts/simulate-e2e.mjs             Token-free workflow simulation
-scripts/validate.mjs                 Starter-kit validator
-scripts/validate-sdd.mjs             Generated-artifact validator
-tests/                               Contract and reference-run tests
-docs/ARCHITECTURE.md                 Design and trust boundaries
-docs/EVALUATION.md                   Quality/cost evaluation program
-TUTORIAL_LINKEDIN.md                 Article source
+```bash
+npm run bootstrap
+npm start -- --no-open
 ```
 
-## Sources
+Its workflow now requires `docs/sdd/PLAN.md`, `SPEC.md`, the eight requirement-specific SDDs, status/manifest traceability, implementation evidence, and `VERIFICATION.md` before a run can be marked verified.
 
-- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
-- [DeepSeek Harness workflow contract](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-catalog.md)
-- [DeepSeek Harness skills](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)
-- [OpenAI GPT-5.5 model guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-5.5)
-- [OpenAI evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices)
-- [OpenAI agent workflow evaluation](https://developers.openai.com/api/docs/guides/agent-evals)
-- [OpenAI agent safety guidance](https://developers.openai.com/api/docs/guides/agent-builder-safety)
+## Safety boundaries
+
+- The default policy allows only the configured loopback origin, declared routes, and action types.
+- Risky actions require a short-lived, run-bound approval; irreversible actions are always denied.
+- Human session ownership does not imply risky-action approval.
+- Failure HTML is sanitized, and input values are masked before every persisted screenshot even though the demo data is synthetic.
+- The local control/prompt layer is not a production security boundary. Production use needs authenticated operator identity, encrypted evidence storage, retention controls, signed artifacts/overlays, and an approved provider/data-residency model.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See `LICENSE`.

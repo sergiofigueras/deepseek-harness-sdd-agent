@@ -1,0 +1,5 @@
+{"sequence":1,"timestamp":"2026-08-27T12:00:00Z","stage":"plan-and-spec","event":"baseline_recorded","baselineHead":"363b549d3bc5d1117cd511b28ed000069a4df75e","dirtyFiles":[]}
+{"sequence":2,"timestamp":"2026-08-27T12:01:00Z","stage":"plan-and-spec","event":"requirements_extracted","source":"Interface.ai Assignment A","criteria":["AC-001","AC-002","AC-003","AC-004","AC-005","AC-006","AC-007","AC-008","AC-009","AC-010","AC-011"]}
+{"sequence":3,"timestamp":"2026-08-27T12:02:00Z","stage":"plan-and-spec","event":"status_transition","status":"ready","approvalMode":"autonomous"}
+{"sequence":4,"timestamp":"2026-08-27T13:35:00Z","stage":"implementation","event":"stage_completed","artifacts":["src/discovery.ts","src/replay.ts","src/handoff.ts","evidence/live-example-capability.json"]}
+{"sequence":5,"timestamp":"2026-08-27T13:40:00Z","stage":"verification","event":"status_transition","status":"verified","liveDiscoveryRunId":"discovery-4e81c2ba-2518-4aed-8721-842aecc1300b","deterministicReplayRunId":"replay-507a5ba7-fd01-492b-9075-1d0bf10b87fe"}
